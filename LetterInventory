@@ -1,0 +1,122 @@
+// Tanner Kooi
+// 9/27/2019
+// CSE 143
+// Assignment #1
+//
+// This program keeps numerical inventory of each alphabetical
+// character in given data.
+
+public class LetterInventory {
+   public static final int CONSTANT = 26;   // Number of letters in the alphabet
+   private int[] inventory;                 // List of alphabetical coresponding integers
+   private int size;                        // Current number of elements in the list
+   
+   // Constructs an inventory counter and records number of instances an alphabetical
+   // character appears in given data
+   // String data - The inputed data to be recorded
+   public LetterInventory(String data) {
+      
+      data = data.toLowerCase();
+      inventory = new int[CONSTANT];
+      
+      for(int i = 0; i < data.length(); i++) {
+         
+         if(Character.isLetter(data.charAt(i))) {
+            
+            inventory[data.charAt(i) - 'a']++;
+            size ++;
+         }
+      }
+   }
+   
+   // Returns the number of a given letter in data
+   // Pre: Alphabetical characters (Throws an IllegalArgumentException if not)
+   // char letter - the character that is being evaluated
+   public int get(char letter) {
+      
+      if(!Character.isLetter(letter)) {
+         throw new IllegalArgumentException();
+      }
+      
+      return inventory[Character.toLowerCase(letter) - 'a'];
+   }
+   
+   // Sets the inventory of a given letter to the given value
+   // pre: character is alphabetical and value is greater than zero
+   // (Throws an IllegalArgumentException if not)
+   // Char letter - the letter that inventory will be set at
+   // int value - the count the letter inventory will be set to
+   public void set(char letter, int value) {
+      
+      if(!Character.isLetter(letter) || value < 0) {
+         throw new IllegalArgumentException();
+      }
+      
+      size += value - inventory[Character.toLowerCase(letter) - 'a'];
+      inventory[Character.toLowerCase(letter) - 'a'] = value;
+   }
+   
+   // Retruns the current number of elements in the inventory
+   public int size() {
+      
+      return size;
+   }
+   
+   // Returns true if the count status is zero or empty
+   public boolean isEmpty() {
+      
+      return size == 0;
+   }
+   
+   // Returns sorted display of innventory with lowercase letters
+   // sorted alphabetically and surrounded by square brackets
+   public String toString() {
+      
+      String display = "[";
+      for (int i = 0; i < CONSTANT; i++) {
+         
+         for(int j = 0; j < inventory[i]; j++) {
+            
+            display += (char)('a' + i);
+         }
+      }
+      return display + "]";
+      
+   }
+   
+   // Adds a given inventory to the standing inventory and
+   // Returns the combined sum of each alphabetical character
+   // LetterInventory other - the second data that will be added to the first data inventory
+   public LetterInventory add(LetterInventory other) {
+      
+      LetterInventory addition = new LetterInventory("");
+      
+      for(int i = 0; i < CONSTANT; i++) {
+         
+         addition.inventory[i] = inventory[i] + other.inventory[i];
+      }
+      addition.size = size + other.size;
+      return addition;
+   }
+   
+   // Subtracts the given inventory from the standing inventory
+   // Returns the remining number of each alphabetical character
+   // or returns null if the remining number is negative
+   // LetterInventory other - the second data that will be subtracted from
+   // the first data inventory
+   public LetterInventory subtract(LetterInventory other) {
+      
+      LetterInventory subtraction = new LetterInventory("");
+      
+      for(int i = 0; i < CONSTANT; i++) {
+         
+         subtraction.inventory[i] = inventory[i] - other.inventory[i];
+         
+         if (subtraction.inventory[i] < 0) {
+            return null;
+         }
+      }
+      subtraction.size = size - other.size;
+      return subtraction;
+   }
+}
